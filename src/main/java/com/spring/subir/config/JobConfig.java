@@ -9,6 +9,8 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 
 @Configuration
 public class JobConfig {
@@ -34,7 +36,13 @@ public class JobConfig {
                 .reader(reader.read())
                 .processor(processor.processor())
                 .writer(writer.writer())
-                .build();
+                .taskExecutor(taskExecutor()).build();
+    }
+    @Bean
+    public TaskExecutor taskExecutor(){
+        SimpleAsyncTaskExecutor asyncTaskExecutor=new SimpleAsyncTaskExecutor("spring_batch");
+        asyncTaskExecutor.setConcurrencyLimit(5);
+        return asyncTaskExecutor;
     }
 
     @Bean
