@@ -20,11 +20,12 @@ public class JobRunner {
     @Autowired
     private JobLauncher jobLauncher;
 
+
     @Autowired
     private Job job;
 
     @Bean
-    @Scheduled(cron="0 13 17 * * ?")
+    @Scheduled(cron="${cron.expression}")
     public JobExecution run() {
         JobExecution jobExecution = null;
         try {
